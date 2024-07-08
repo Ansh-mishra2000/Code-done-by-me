@@ -42,3 +42,39 @@ int median(vector<vector<int>> &matrix, int m, int n) {
     }
     return start;
 }
+//approach III
+int findSmallerElements(vector<vector<int>>&matrix,int assumeMedian){
+    int noOfElements=0;
+    for(int i=0;i<matrix.size();i++){
+        //matrix[i]->0,1,2
+        //apply Binary Searchon matrix[i]
+
+        int start=0;
+        int end=matrix[i].size()-1;
+
+        while(start<=end){
+            int mid=start+(end-start)/2;
+            if(matrix[i][mid]<=assumeMedian) start=mid+1;
+            else end=mid-1;
+        }
+        noOfElements+=start;
+    }
+    return noOfElements;
+}
+int median(vector<vector<int>> &matrix, int m, int n) {
+    int N=m*n;
+    int medianIndex=N/2;
+    int start=1;
+    int end=1000000000;
+    
+
+    while(start<=end){
+        int assumeMedian=start+(end-start)/2;
+        //no of elements less than assumed median
+        int lesserElements=findSmallerElements(matrix,assumeMedian);
+
+        if(lesserElements<=medianIndex) start=assumeMedian+1;
+        else end=assumeMedian-1;
+    }
+    return start;
+}

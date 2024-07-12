@@ -1,77 +1,35 @@
+//approach I
+
 #include <bits/stdc++.h>
+void insertionSort(vector<int> &sortedArray,int newElement){
+    sortedArray.push_back(newElement);
+    for(int i=1;i<sortedArray.size();i++){
+        int key=sortedArray[i];
+        int j=i-1;
 
-vector<int> findMedian(vector<int> &arr, int n){
-
-    
-
-    // Write your code here 
-
-    vector<int>ans;
-
-    priority_queue<int> max_heap; // max-heap for the lower half of the numbers
-
-    priority_queue<int, vector<int>, greater<int>> min_heap; 
-
-    for(int i=0; i<n; ++i)
-
-    {
-
-        if(max_heap.empty() || arr[i]<=max_heap.top())
-
-        {
-
-            max_heap.push(arr[i]);
-
+        while(j>=0 && key>sortedArray[j]){
+            sortedArray[j+1]=sortedArray[j];
+            j=j-1;
         }
-
-        else
-
-        {
-
-            min_heap.push(arr[i]);
-
-        }
-
-        if(max_heap.size()>min_heap.size()+1)
-
-        {
-
-            min_heap.push(max_heap.top());
-
-            max_heap.pop();
-
-        }
-
-        else if(max_heap.size()+1<min_heap.size())
-
-        {
-
-            max_heap.push(min_heap.top());
-
-            min_heap.pop();
-
-        }
-
-        if(max_heap.size()==min_heap.size())
-
-        {
-
-            ans.push_back((max_heap.top()+min_heap.top())/2);
-
-        }
-
-        else if (max_heap.size() > min_heap.size()) {
-
-            ans.push_back(max_heap.top());
-
-        } else {
-
-            ans.push_back(min_heap.top());
-
-        }
-
+        sortedArray[j+1]=key;
     }
-
-    return ans;
-
 }
+int findMedian(vector<int> sortedArray){
+    int n=sortedArray.size();
+    if(n%2==0) return (sortedArray[n/2-1] + sortedArray[n/2])/2;
+    else return sortedArray[n/2];
+}
+vector<int> findMedian(vector<int> &arr, int n){
+    
+    vector<int>ans;
+    vector<int>sortedArray;
+
+
+	for(int i=0;i<n;i++){
+        int element=arr[i];
+        insertionSort(sortedArray,arr[i]);
+        ans.push_back(findMedian(sortedArray));
+    }
+    return ans;
+}
+
